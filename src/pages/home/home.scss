@@ -1,18 +1,18 @@
 .startbtn{
-    border: 2px solid black;
-    background-color: white;
     color: black;
     padding: 14px 28px;
     font-size: 16px;
     cursor: pointer;
-    position:relative;
-    transition: .5s ease;
-    top: 191px;
-    left: 440px;
-    right: -440px;
-    bottom: -191px;
-}
+    display: block;
+    margin: auto;
+    background-color:  #ADDCC4;
+};
+
 #Hello{
     font-size: 50px;
     text-align: center
+}
+
+ion-content{
+    background-color: #F5FFED !important;
 }
