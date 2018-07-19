@@ -169,10 +169,10 @@ export class GamePage {
     function preload() {
         //LOAD IMAGES
         this.game.load.image('phaser', 'assets/circle.png');
-        this.game.load.image('2', 'assets/imgs/2.png');
-        this.game.load.image('3', 'assets/imgs/2.png');
-        this.game.load.image('4', 'assets/imgs/2.png');
-        this.game.load.image('5', 'assets/imgs/2.png');
+        this.game.load.image('2', 'assets/imgs/13.png');
+        this.game.load.image('3', 'assets/imgs/11.png');
+        this.game.load.image('4', 'assets/imgs/12.png');
+        this.game.load.image('5', 'assets/imgs/14.png');
       }
 
     function update() {
@@ -292,10 +292,10 @@ export class GamePage {
     function preload() {
         //LOAD IMAGES
         this.game.load.image('phaser', 'assets/circle.png');
-        this.game.load.image('2', 'assets/imgs/4.png');
-        this.game.load.image('3', 'assets/imgs/4.png');
-        this.game.load.image('4', 'assets/imgs/4.png');
-        this.game.load.image('5', 'assets/imgs/4.png');
+        this.game.load.image('2', 'assets/imgs/10.png');
+        this.game.load.image('3', 'assets/imgs/9.png');
+        this.game.load.image('4', 'assets/imgs/8.png');
+        this.game.load.image('5', 'assets/imgs/7.png');
       }
 
     function update() {
@@ -415,10 +415,10 @@ export class GamePage {
     function preload() {
         //LOAD IMAGES
         this.game.load.image('phaser', 'assets/circle.png');
-        this.game.load.image('2', 'assets/imgs/10.png');
-        this.game.load.image('3', 'assets/imgs/9.png');
-        this.game.load.image('4', 'assets/imgs/8.png');
-        this.game.load.image('5', 'assets/imgs/7.png');
+        this.game.load.image('2', 'assets/imgs/17.png');
+        this.game.load.image('3', 'assets/imgs/16.png');
+        this.game.load.image('4', 'assets/imgs/15.png');
+        this.game.load.image('5', 'assets/imgs/18.png');
       }
 
     function update() {
