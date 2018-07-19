@@ -274,7 +274,7 @@ export class GamePage {
 
       var style = { font: "32px Arial", align: "center" };
 
-      var text = this.game.add.text(window.innerWidth / 2 - 45, window.innerHeight / 2 + 45, "5x = 25", style);
+      var text = this.game.add.text(window.innerWidth / 2 - 45, window.innerHeight / 2 + 45, "1/2 + 1/3", style);
       this.game.world.bringToTop(text);
     }
   }
@@ -397,7 +397,7 @@ export class GamePage {
 
       var style = { font: "32px Arial", align: "center" };
 
-      var text = this.game.add.text(window.innerWidth / 2 - 45, window.innerHeight / 2 + 45, "5x = 25", style);
+      var text = this.game.add.text(window.innerWidth / 2 - 45, window.innerHeight / 2 + 45, "12 * 11", style);
       this.game.world.bringToTop(text);
     }
   }
@@ -415,10 +415,10 @@ export class GamePage {
     function preload() {
         //LOAD IMAGES
         this.game.load.image('phaser', 'assets/circle.png');
-        this.game.load.image('2', 'assets/imgs/5.png');
-        this.game.load.image('3', 'assets/imgs/5.png');
-        this.game.load.image('4', 'assets/imgs/5.png');
-        this.game.load.image('5', 'assets/imgs/5.png');
+        this.game.load.image('2', 'assets/imgs/10.png');
+        this.game.load.image('3', 'assets/imgs/9.png');
+        this.game.load.image('4', 'assets/imgs/8.png');
+        this.game.load.image('5', 'assets/imgs/7.png');
       }
 
     function update() {
@@ -520,7 +520,7 @@ export class GamePage {
 
       var style = { font: "32px Arial", align: "center" };
 
-      var text = this.game.add.text(window.innerWidth / 2 - 45, window.innerHeight / 2 + 45, "5x = 25", style);
+      var text = this.game.add.text(window.innerWidth / 2 - 45, window.innerHeight / 2 + 45, "20x = 80", style);
       this.game.world.bringToTop(text);
     }
   }
