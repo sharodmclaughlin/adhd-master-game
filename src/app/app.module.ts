@@ -10,21 +10,23 @@ import { GamePage } from '../pages/game/game';
 
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { DeviceMotion,  } from '@ionic-native/device-motion';
+
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    GamePage
+    GamePage,
   ],
   imports: [
-    BrowserModule,
+
+  BrowserModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
-    GamePage
+    GamePage,
   ],
   providers: [
     StatusBar,

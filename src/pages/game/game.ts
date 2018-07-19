@@ -4,214 +4,550 @@ import {
   ViewChild
 } from '@angular/core';
 import { NavController } from 'ionic-angular';
-
-
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device-motion';
+import { Platform } from 'ionic-angular';
 
+declare var Phaser: any;
 @Component({
   selector: 'page-game',
   templateUrl: 'game.html',
 })
 export class GamePage {
-  /**
-  * 'plug into' DOM canvas element using @ViewChild
-  */
-  @ViewChild('canvas') canvasEl: ElementRef;
-  @ViewChild('img5') img5: ElementRef;
-  
+  public startGame2Flag = false;
+  public startGame3Flag = false;
+  public startGame4Flag = false;
+  public incorrect = false;
+  public game: any;
+  public sprite;
+  public tunnel2;
+  public tunnel3;
+  public tunnel5;
+  public tunnel4;
 
-
-  /**
-    * Reference Canvas object
-    */
-  public _CANVAS: any;
-  public ctx: any;
-
-
-
-  /**
-    * Reference  the context for the Canvas element
-    */
-  private _CONTEXT: any;
-
-  public posX = 25;
-  public posY = 25;
-  constructor(public navCtrl: NavController,  public screenOrientation: ScreenOrientation, private deviceMotion: DeviceMotion) {
-    // set to landscape
-    console.log(this.screenOrientation.type);
-    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.LANDSCAPE_PRIMARY)
-
-    const options = {
-      frequency: 500
-    };
-    // // Get the device current acceleration
-    // this.deviceMotion.getCurrentAcceleration().then(
-    //   (acceleration: DeviceMotionAccelerationData) => console.log(acceleration),
-    //   (error: any) => console.log(error)
-    // );
-
-    // // Watch device acceleration
-    // var subscription = this.deviceMotion.watchAcceleration(options).subscribe((acceleration: DeviceMotionAccelerationData) => {
-
-    //   if(acceleration.y > 2){
-    //     //postive and not still
-    //     console.log('positive');
-    //     if(this.posX >= 50){
-    //       this.posX -= 50;
-    //     }
-
-    //   }else if (acceleration.y < -2){ 
-    //     //negative and not still
-    //     console.log('negative')
-    //     if(this.posX <= (window.innerWidth-50)){
-    //       this.posX += 50;
-    //     }
-    //   }
-
-
-    //   // if(acceleration.x > 2){
-    //   //   //postive and not still
-    //   //   console.log('positive');
-    //   //   if(this.posY >= 50){
-    //   //     this.posY -= 50;
-    //   //   }
-    //   // }else if (acceleration.x < -2){ 
-    //   //   //negative and not still
-    //   //   console.log('negative')
-    //   //   if(this.posY <= (200-50)){
-    //   //     this.posY += 50;
-    //   //   }
-    //   // }
-    // });
+  constructor(public navCtrl: NavController, public screenOrientation: ScreenOrientation, public deviceMotion: DeviceMotion, public platform: Platform) {
+    this.platform.ready().then(() => {
+      // this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.LANDSCAPE_PRIMARY)
+      this.game1(this.deviceMotion);
+    });
   }
+  // START GAME
+  game1(deviceMotion) {
+    var self = this;
+    this.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'phaser-example',
+      {
+        preload: preload,
+        create: create,
+        update: update
+      });
 
-  ionViewDidLoad() {
-    console.log('canvas');
-    var _CANVAS = this.canvasEl.nativeElement;
-    var ctx = _CANVAS.getContext("2d");
-
-    function resizeCanvas() {
-      _CANVAS.width = window.innerWidth;
-      _CANVAS.height = window.innerHeight;
-
-      /**
-       * Your drawings need to be inside this function otherwise they will be reset when 
-       * you resize the browser window and the canvas goes will be cleared.
-       */
-      draw();
-    }
-
-    var particles = [];
-    for (var i = 0; i < 1; i++) {
-      //This will add 50 particles to the array with random positions
-      particles.push(new create_particle());
-    }
-
-    //Lets create a function which will help us to create multiple particles
-    function create_particle() {
-      //Random position on the canvas
-      this.x = Math.random() * 500;
-      this.y = Math.random() * 500;
-      //Random velocity
-      this.vx = 0.5;
-      this.vy = 1;
-      //Random colors
-      var r = 255
-      var g = 0;
-      var b = 0;
-      this.color = "rgba(" + r + ", " + g + ", " + b + ", 0.5)";
-
-      //Random size
-      this.radius = 15;
-    }
-
-    var draw = () => {
-
-      ctx.fillStyle = "#F5FFED";
-      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-
-      //Lets draw particles from the array now
-      for (var t = 0; t < particles.length; t++) {
-        var p = particles[t];
-
-        ctx.beginPath();
-        ctx.fillStyle = p.color;
-        ctx.arc(p.x, p.y, p.radius, Math.PI * 2, false);
-        ctx.fill();
-
-        const options = {
-          frequency: 500
-        };
-        var subscription = this.deviceMotion.watchAcceleration().subscribe((acceleration: DeviceMotionAccelerationData) => {
-
-          if (acceleration.y > 2) {
-            //postive and not still
-            
-            p.x -= 7;
-
-
-          } else if (acceleration.y < -2) {
-            //negative and not still
-            
-            p.x += 7;
-          }
-
-          else if (acceleration.x > 2) {
-            //postive and not still
-            
-            p.y -= 7;
-
-          } else if (acceleration.x < -2) {
-            //negative and not still
-            
-            p.y += 7;
-          }
-
-          console.log(p.y);
-
-
-        });
-
-
-        if ((p.x + p.radius) > window.innerWidth) {
-
-          p.x = window.innerWidth - p.radius;
-          console.log('reset');
-        } else if ((p.x - p.radius) < 0) {
-
-          p.x = p.radius;
-
-        }
-
-        if ((p.y + p.radius) > window.innerHeight) {
-
-          p.y = window.innerHeight - p.radius;
-          console.log('reset');
-        } else if ((p.y - p.radius) < 0) {
-          p.y = p.radius;
-        }
-
+    function preload() {
+        //LOAD IMAGES
+        this.game.load.image('phaser', 'assets/circle.png');
+        this.game.load.image('2', 'assets/imgs/2.png');
+        this.game.load.image('3', 'assets/imgs/3.png');
+        this.game.load.image('4', 'assets/imgs/4.png');
+        this.game.load.image('5', 'assets/imgs/5.png');
       }
 
-      // draw tubes homie
+    function update() {
+      const options = {
+        frequency: 200
+      };
 
+      deviceMotion.watchAcceleration().subscribe((acceleration: DeviceMotionAccelerationData) => {
+        if (acceleration.y > 2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(-200, 0);
+          //sprite.body.velocity.x = -200;
+        } else if (acceleration.y < -2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(200, 0);
+          //sprite.body.velocity.x = 200;
+        }
+        else if (acceleration.x > 2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(0, -200);
+          //sprite.body.velocity.y = -200;
+        } else if (acceleration.x < -2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(0, 200);
+          //sprite.body.velocity.y = 200;
+        }
+      })
 
-      const img5 = document.getElementById("5");
-      ctx.drawImage(img5, (window.innerWidth/2 -50), -10, 100, 100);
-      
-      const img4 = document.getElementById("4");
-      ctx.drawImage(img4, (window.innerWidth/2 -50), window.innerHeight-100, 100, 100);
-
-      const img3 = document.getElementById("3");
-      ctx.drawImage(img3, (window.innerWidth - 80), (window.innerHeight/2 -50), 100, 100);
-
-      const img2 = document.getElementById("2");
-      ctx.drawImage(img2, -10, (window.innerHeight/2 -50), 100, 100);
+      // check for collisions
+      if (this.game.physics.arcade.overlap(self.sprite, this.tunnel2, null, null, this)) {
+        this.game.paused = true;
+        self.incorrect = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel3, null, null, this)) {
+        this.game.paused = true;
+        self.incorrect = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel4, null, null, this)) {
+        this.game.paused = true;
+        self.incorrect = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel5, null, null, this)) {
+        this.game.paused = true;
+        self.startGame2Flag = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      }
     }
 
-    resizeCanvas();
-    setInterval(draw, 63);
+    function create(){
+      // enable arcade physics
+      this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
+      // adds background color
+      this.game.stage.backgroundColor = '#fff';
+
+      // adds ball sprite to the game
+      self.sprite = this.game.add.sprite(window.innerWidth / 2, window.innerHeight / 2, 'phaser');
+
+      // enable physics on the sprite
+      this.game.physics.arcade.enable(self.sprite);
+
+      // turn on wall bounce
+      self.sprite.body.collideWorldBounds = true;
+
+      //  This sets the image bounce energy for the horizontal 
+      //  and vertical vectors. "1" is 100% energy return
+      self.sprite.body.bounce.set(1);
+
+      //  This gets it moving
+      self.sprite.body.velocity.setTo(0, 0);
+
+      // manipulate the hiehgt and width of our sprite
+      self.sprite.height = 25;
+      self.sprite.width = 25;
+
+      this.tunnel2 = this.game.add.sprite(0, window.innerHeight / 2 - 28, '2');
+      this.game.physics.arcade.enable(this.tunnel2);
+      this.tunnel2.height = 75;
+      this.tunnel2.width = 75;
+
+      this.tunnel3 = this.game.add.sprite(window.innerWidth - 75, window.innerHeight / 2 - 28, '3');
+      this.game.physics.arcade.enable(this.tunnel3);
+      this.tunnel3.height = 75;
+      this.tunnel3.width = 75;
+
+      this.tunnel4 = this.game.add.sprite(window.innerWidth / 2 - 28, window.innerHeight - 75, '4');
+      this.game.physics.arcade.enable(this.tunnel4);
+      this.tunnel4.height = 75;
+      this.tunnel4.width = 75;
+
+      this.tunnel5 = this.game.add.sprite(window.innerWidth / 2 - 28, 0, '5');
+      this.game.physics.arcade.enable(this.tunnel5);
+      this.tunnel5.height = 75;
+      this.tunnel5.width = 75;
+
+      var style = { font: "32px Arial", align: "center" };
+
+      var text = this.game.add.text(window.innerWidth / 2 - 45, window.innerHeight / 2 + 45, "5x = 25", style);
+      this.game.world.bringToTop(text);
+    }
+  }
+
+  // START GAME
+  game2(deviceMotion) {
+    var self = this;
+    this.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'phaser-example',
+      {
+        preload: preload,
+        create: create,
+        update: update
+      });
+
+    function preload() {
+        //LOAD IMAGES
+        this.game.load.image('phaser', 'assets/circle.png');
+        this.game.load.image('2', 'assets/imgs/2.png');
+        this.game.load.image('3', 'assets/imgs/2.png');
+        this.game.load.image('4', 'assets/imgs/2.png');
+        this.game.load.image('5', 'assets/imgs/2.png');
+      }
+
+    function update() {
+      const options = {
+        frequency: 200
+      };
+
+      deviceMotion.watchAcceleration().subscribe((acceleration: DeviceMotionAccelerationData) => {
+        if (acceleration.y > 2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(-200, 0);
+          //sprite.body.velocity.x = -200;
+        } else if (acceleration.y < -2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(200, 0);
+          //sprite.body.velocity.x = 200;
+        }
+        else if (acceleration.x > 2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(0, -200);
+          //sprite.body.velocity.y = -200;
+        } else if (acceleration.x < -2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(0, 200);
+          //sprite.body.velocity.y = 200;
+        }
+      })
+
+      // check for collisions
+      if (this.game.physics.arcade.overlap(self.sprite, this.tunnel2, null, null, this)) {
+        this.game.paused = true;
+        self.incorrect = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel3, null, null, this)) {
+        this.game.paused = true;
+        self.incorrect = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel4, null, null, this)) {
+        this.game.paused = true;
+        self.incorrect = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel5, null, null, this)) {
+        this.game.paused = true;
+        self.startGame3Flag = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      }
+    }
+
+    function create(){
+      // enable arcade physics
+      this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+      // adds background color
+      this.game.stage.backgroundColor = '#fff';
+
+      // adds ball sprite to the game
+      self.sprite = this.game.add.sprite(window.innerWidth / 2, window.innerHeight / 2, 'phaser');
+
+      // enable physics on the sprite
+      this.game.physics.arcade.enable(self.sprite);
+
+      // turn on wall bounce
+      self.sprite.body.collideWorldBounds = true;
+
+      //  This sets the image bounce energy for the horizontal 
+      //  and vertical vectors. "1" is 100% energy return
+      self.sprite.body.bounce.set(1);
+
+      //  This gets it moving
+      self.sprite.body.velocity.setTo(0, 0);
+
+      // manipulate the hiehgt and width of our sprite
+      self.sprite.height = 25;
+      self.sprite.width = 25;
+
+      this.tunnel2 = this.game.add.sprite(0, window.innerHeight / 2 - 28, '2');
+      this.game.physics.arcade.enable(this.tunnel2);
+      this.tunnel2.height = 75;
+      this.tunnel2.width = 75;
+
+      this.tunnel3 = this.game.add.sprite(window.innerWidth - 75, window.innerHeight / 2 - 28, '3');
+      this.game.physics.arcade.enable(this.tunnel3);
+      this.tunnel3.height = 75;
+      this.tunnel3.width = 75;
+
+      this.tunnel4 = this.game.add.sprite(window.innerWidth / 2 - 28, window.innerHeight - 75, '4');
+      this.game.physics.arcade.enable(this.tunnel4);
+      this.tunnel4.height = 75;
+      this.tunnel4.width = 75;
+
+      this.tunnel5 = this.game.add.sprite(window.innerWidth / 2 - 28, 0, '5');
+      this.game.physics.arcade.enable(this.tunnel5);
+      this.tunnel5.height = 75;
+      this.tunnel5.width = 75;
+
+      var style = { font: "32px Arial", align: "center" };
+
+      var text = this.game.add.text(window.innerWidth / 2 - 45, window.innerHeight / 2 + 45, "5x = 25", style);
+      this.game.world.bringToTop(text);
+    }
+  }
+
+  // START GAME
+  game3(deviceMotion) {
+    var self = this;
+    this.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'phaser-example',
+      {
+        preload: preload,
+        create: create,
+        update: update
+      });
+
+    function preload() {
+        //LOAD IMAGES
+        this.game.load.image('phaser', 'assets/circle.png');
+        this.game.load.image('2', 'assets/imgs/4.png');
+        this.game.load.image('3', 'assets/imgs/4.png');
+        this.game.load.image('4', 'assets/imgs/4.png');
+        this.game.load.image('5', 'assets/imgs/4.png');
+      }
+
+    function update() {
+      const options = {
+        frequency: 200
+      };
+
+      deviceMotion.watchAcceleration().subscribe((acceleration: DeviceMotionAccelerationData) => {
+        if (acceleration.y > 2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(-200, 0);
+          //sprite.body.velocity.x = -200;
+        } else if (acceleration.y < -2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(200, 0);
+          //sprite.body.velocity.x = 200;
+        }
+        else if (acceleration.x > 2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(0, -200);
+          //sprite.body.velocity.y = -200;
+        } else if (acceleration.x < -2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(0, 200);
+          //sprite.body.velocity.y = 200;
+        }
+      })
+
+      // check for collisions
+      if (this.game.physics.arcade.overlap(self.sprite, this.tunnel2, null, null, this)) {
+        this.game.paused = true;
+        self.incorrect = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel3, null, null, this)) {
+        this.game.paused = true;
+        self.incorrect = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel4, null, null, this)) {
+        this.game.paused = true;
+        self.incorrect = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel5, null, null, this)) {
+        this.game.paused = true;
+        self.startGame4Flag = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      }
+    }
+
+    function create(){
+      // enable arcade physics
+      this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+      // adds background color
+      this.game.stage.backgroundColor = '#fff';
+
+      // adds ball sprite to the game
+      self.sprite = this.game.add.sprite(window.innerWidth / 2, window.innerHeight / 2, 'phaser');
+
+      // enable physics on the sprite
+      this.game.physics.arcade.enable(self.sprite);
+
+      // turn on wall bounce
+      self.sprite.body.collideWorldBounds = true;
+
+      //  This sets the image bounce energy for the horizontal 
+      //  and vertical vectors. "1" is 100% energy return
+      self.sprite.body.bounce.set(1);
+
+      //  This gets it moving
+      self.sprite.body.velocity.setTo(0, 0);
+
+      // manipulate the hiehgt and width of our sprite
+      self.sprite.height = 25;
+      self.sprite.width = 25;
+
+      this.tunnel2 = this.game.add.sprite(0, window.innerHeight / 2 - 28, '2');
+      this.game.physics.arcade.enable(this.tunnel2);
+      this.tunnel2.height = 75;
+      this.tunnel2.width = 75;
+
+      this.tunnel3 = this.game.add.sprite(window.innerWidth - 75, window.innerHeight / 2 - 28, '3');
+      this.game.physics.arcade.enable(this.tunnel3);
+      this.tunnel3.height = 75;
+      this.tunnel3.width = 75;
+
+      this.tunnel4 = this.game.add.sprite(window.innerWidth / 2 - 28, window.innerHeight - 75, '4');
+      this.game.physics.arcade.enable(this.tunnel4);
+      this.tunnel4.height = 75;
+      this.tunnel4.width = 75;
+
+      this.tunnel5 = this.game.add.sprite(window.innerWidth / 2 - 28, 0, '5');
+      this.game.physics.arcade.enable(this.tunnel5);
+      this.tunnel5.height = 75;
+      this.tunnel5.width = 75;
+
+      var style = { font: "32px Arial", align: "center" };
+
+      var text = this.game.add.text(window.innerWidth / 2 - 45, window.innerHeight / 2 + 45, "5x = 25", style);
+      this.game.world.bringToTop(text);
+    }
+  }
+
+  // START GAME
+  game4(deviceMotion) {
+    var self = this;
+    this.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'phaser-example',
+      {
+        preload: preload,
+        create: create,
+        update: update
+      });
+
+    function preload() {
+        //LOAD IMAGES
+        this.game.load.image('phaser', 'assets/circle.png');
+        this.game.load.image('2', 'assets/imgs/5.png');
+        this.game.load.image('3', 'assets/imgs/5.png');
+        this.game.load.image('4', 'assets/imgs/5.png');
+        this.game.load.image('5', 'assets/imgs/5.png');
+      }
+
+    function update() {
+      const options = {
+        frequency: 200
+      };
+
+      deviceMotion.watchAcceleration().subscribe((acceleration: DeviceMotionAccelerationData) => {
+        if (acceleration.y > 2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(-200, 0);
+          //sprite.body.velocity.x = -200;
+        } else if (acceleration.y < -2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(200, 0);
+          //sprite.body.velocity.x = 200;
+        }
+        else if (acceleration.x > 2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(0, -200);
+          //sprite.body.velocity.y = -200;
+        } else if (acceleration.x < -2) {
+          //  This gets it moving
+          self.sprite.body.velocity.setTo(0, 200);
+          //sprite.body.velocity.y = 200;
+        }
+      })
+
+      // check for collisions
+      if (this.game.physics.arcade.overlap(self.sprite, this.tunnel2, null, null, this)) {
+        this.game.paused = true;
+        self.incorrect = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel3, null, null, this)) {
+        this.game.paused = true;
+        self.incorrect = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel4, null, null, this)) {
+        this.game.paused = true;
+        self.incorrect = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel5, null, null, this)) {
+        this.game.paused = true;
+        self.startGame3Flag = true;
+        self.sprite.x = window.innerWidth / 2;
+        self.sprite.y = window.innerHeight / 2;
+      }
+    }
+
+    function create(){
+      // enable arcade physics
+      this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+      // adds background color
+      this.game.stage.backgroundColor = '#fff';
+
+      // adds ball sprite to the game
+      self.sprite = this.game.add.sprite(window.innerWidth / 2, window.innerHeight / 2, 'phaser');
+
+      // enable physics on the sprite
+      this.game.physics.arcade.enable(self.sprite);
+
+      // turn on wall bounce
+      self.sprite.body.collideWorldBounds = true;
+
+      //  This sets the image bounce energy for the horizontal 
+      //  and vertical vectors. "1" is 100% energy return
+      self.sprite.body.bounce.set(1);
+
+      //  This gets it moving
+      self.sprite.body.velocity.setTo(0, 0);
+
+      // manipulate the hiehgt and width of our sprite
+      self.sprite.height = 25;
+      self.sprite.width = 25;
+
+      this.tunnel2 = this.game.add.sprite(0, window.innerHeight / 2 - 28, '2');
+      this.game.physics.arcade.enable(this.tunnel2);
+      this.tunnel2.height = 75;
+      this.tunnel2.width = 75;
+
+      this.tunnel3 = this.game.add.sprite(window.innerWidth - 75, window.innerHeight / 2 - 28, '3');
+      this.game.physics.arcade.enable(this.tunnel3);
+      this.tunnel3.height = 75;
+      this.tunnel3.width = 75;
+
+      this.tunnel4 = this.game.add.sprite(window.innerWidth / 2 - 28, window.innerHeight - 75, '4');
+      this.game.physics.arcade.enable(this.tunnel4);
+      this.tunnel4.height = 75;
+      this.tunnel4.width = 75;
+
+      this.tunnel5 = this.game.add.sprite(window.innerWidth / 2 - 28, 0, '5');
+      this.game.physics.arcade.enable(this.tunnel5);
+      this.tunnel5.height = 75;
+      this.tunnel5.width = 75;
+
+      var style = { font: "32px Arial", align: "center" };
+
+      var text = this.game.add.text(window.innerWidth / 2 - 45, window.innerHeight / 2 + 45, "5x = 25", style);
+      this.game.world.bringToTop(text);
+    }
+  }
+
+  restart() {
+    console.log('restart');
+    this.game.paused = false;
+    this.sprite.body.velocity.setTo(0, 0);
+    this.incorrect = false;
+  }
+
+  startGame2() {
+    this.game.destroy();
+    this.incorrect = false;
+    this.startGame2Flag = false;
+    this.game2(this.deviceMotion);
+  }
+
+  startGame3() {
+    this.game.destroy();
+    this.incorrect = false;
+    this.startGame3Flag = false;
+    this.game3(this.deviceMotion);
+  }
+
+  startGame4() {
+    this.game.destroy();
+    this.incorrect = false;
+    this.startGame4Flag = false;
+    this.game4(this.deviceMotion);
   }
 }

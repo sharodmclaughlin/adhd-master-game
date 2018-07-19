@@ -1,16 +1,28 @@
 
 
 <ion-content>
-  <div class="ion-canvas">
-    <canvas #canvas></canvas>
+  <div class="overlay" *ngIf="startGame2Flag">
+    <h1>You are correct</h1>
+    <button (click)="startGame2()">Next Level</button>
   </div>
 
-    <img #img5 class="no-display" id="5" src="assets/imgs/5.png" alt="">
+  <div class="overlay" *ngIf="startGame3Flag">
+    <h1>You are correct</h1>
+    <button (click)="startGame3()">Next Level</button>
+  </div>
 
-    <img #img4 class="no-display" id="4" src="assets/imgs/4.png" alt="">
+  <div class="overlay" *ngIf="startGame4Flag">
+    <h1>You are correct</h1>
+    <button (click)="startGame4()">Next Level</button>
+  </div>
 
-    <img #img3 class="no-display" id="3" src="assets/imgs/3.png" alt="">
 
-    <img #img2 class="no-display" id="2" src="assets/imgs/2.png" alt="">
+  <div class="overlay" *ngIf="incorrect">
+    <h1>You are incorrect!</h1>
+    <button (click)="restart()">Try Again</button>
+  </div>
+
+
+  <div id="phaser-example"></div>
 
 </ion-content>
