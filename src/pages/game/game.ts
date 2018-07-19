@@ -7,6 +7,7 @@ import { NavController } from 'ionic-angular';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { DeviceMotion, DeviceMotionAccelerationData } from '@ionic-native/device-motion';
 import { Platform } from 'ionic-angular';
+import { GameDonePage } from '../game-done/game-done';
 
 declare var Phaser: any;
 @Component({
@@ -17,6 +18,7 @@ export class GamePage {
   public startGame2Flag = false;
   public startGame3Flag = false;
   public startGame4Flag = false;
+  public startGameDone = false;
   public incorrect = false;
   public game: any;
   public sprite;
@@ -463,7 +465,7 @@ export class GamePage {
         self.sprite.y = window.innerHeight / 2;
       } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel5, null, null, this)) {
         this.game.paused = true;
-        self.startGame3Flag = true;
+        self.startGameDone = true;
         self.sprite.x = window.innerWidth / 2;
         self.sprite.y = window.innerHeight / 2;
       }
@@ -549,5 +551,12 @@ export class GamePage {
     this.incorrect = false;
     this.startGame4Flag = false;
     this.game4(this.deviceMotion);
+  }
+
+  gameDone(){
+    this.game.destroy();
+    this.incorrect = false;
+    this.startGameDone = false;
+    this.navCtrl.push(GameDonePage)
   }
 }

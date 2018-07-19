@@ -16,6 +16,11 @@
     <button (click)="startGame4()">Next Level</button>
   </div>
 
+  <div class="overlay" *ngIf="startGameDone">
+    <h1>You are correct</h1>
+    <button (click)="gameDone()">Game Done</button>
+  </div>
+
 
   <div class="overlay" *ngIf="incorrect">
     <h1>You are incorrect!</h1>
