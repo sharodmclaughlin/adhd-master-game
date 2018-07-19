@@ -1,3 +1,21 @@
 page-home {
-
+#Hello{
+    font-size: 75px;
+    text-align: center;
+    padding: 50px 50px;
+    font-family: "Lucida Console", Monospace;
+}
+#Start{
+    color: black;
+    padding: 14px 14px;
+    font-size: 25px;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+    background-color:  #ADDCC4;
+    font-family: "Lucida Console", Monospace;
+}
+}
+ion-content{
+    background-image:#F5FFED !important;
 }
