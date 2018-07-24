@@ -207,7 +207,7 @@ export class GamePage {
         self.incorrect = true;
         self.sprite.x = window.innerWidth / 2;
         self.sprite.y = window.innerHeight / 2;
-      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel3, null, null, this)) {
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel5, null, null, this)) {
         this.game.paused = true;
         self.incorrect = true;
         self.sprite.x = window.innerWidth / 2;
@@ -217,7 +217,7 @@ export class GamePage {
         self.incorrect = true;
         self.sprite.x = window.innerWidth / 2;
         self.sprite.y = window.innerHeight / 2;
-      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel5, null, null, this)) {
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel3, null, null, this)) {
         this.game.paused = true;
         self.startGame3Flag = true;
         self.sprite.x = window.innerWidth / 2;
@@ -335,12 +335,12 @@ export class GamePage {
         self.incorrect = true;
         self.sprite.x = window.innerWidth / 2;
         self.sprite.y = window.innerHeight / 2;
-      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel4, null, null, this)) {
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel5, null, null, this)) {
         this.game.paused = true;
         self.incorrect = true;
         self.sprite.x = window.innerWidth / 2;
         self.sprite.y = window.innerHeight / 2;
-      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel5, null, null, this)) {
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel4, null, null, this)) {
         this.game.paused = true;
         self.startGame4Flag = true;
         self.sprite.x = window.innerWidth / 2;
@@ -448,7 +448,7 @@ export class GamePage {
       })
 
       // check for collisions
-      if (this.game.physics.arcade.overlap(self.sprite, this.tunnel2, null, null, this)) {
+      if (this.game.physics.arcade.overlap(self.sprite, this.tunnel5, null, null, this)) {
         this.game.paused = true;
         self.incorrect = true;
         self.sprite.x = window.innerWidth / 2;
@@ -463,7 +463,7 @@ export class GamePage {
         self.incorrect = true;
         self.sprite.x = window.innerWidth / 2;
         self.sprite.y = window.innerHeight / 2;
-      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel5, null, null, this)) {
+      } else if (this.game.physics.arcade.overlap(self.sprite, this.tunnel2, null, null, this)) {
         this.game.paused = true;
         self.startGameDone = true;
         self.sprite.x = window.innerWidth / 2;
